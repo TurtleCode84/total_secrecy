@@ -1,41 +1,16 @@
 const { createInterface } = require('node:readline');
 const { execSync } = require('child_process');
 const fetch = require('node-fetch');
-const { Client, Routes, GatewayIntentBits, ActivityType, Commands } = require('discord.js');
-const prefix = 't!';
+const { Client, Routes, GatewayIntentBits, ActivityType } = require('discord.js');
+const prefix = 'sus!';
+const admin = ['1017553088464310272']; // user id
 
+var isGame = false; // switch for listening to game activity
+var currentImposter; // temporary storage variable
+
+const sus_player = '1203792083538681958';
 const sus_crewmate = '1203737581984948335';
 const sus_imposter = '1203741209714106408';
-
-const ping = {
-  name: 'ping',
-  description: 'Pings the bot'
-};
-
-const sus = {
-  name: 'sus',
-  description: 'Starts a server-wide game of Among Us'
-}
-
-const say = {
-  name: 'say',
-  description: 'Makes the bot repeat whatever your specify',
-  options: [
-    {
-      name: 'message',
-      description: 'The message to repeat',
-      type: 3,
-      required: true
-    }
-  ]
-}
-
-const help = {
-  name: 'help',
-  description: 'Shows a list of available commands'
-}
-
-const commands = [ping, sus, say, help];
 
 const client = new Client({
   intents: [
@@ -50,89 +25,161 @@ const client = new Client({
 });
 const rl = createInterface({ input: process.stdin, output: process.stdout });
 
-
-client.on('interactionCreate', async (interaction) => {
-  switch(interaction.commandName) {
-    case 'ping':
-      await interaction.reply(`Pong! The round trip took ${Date.now() - interaction.createdTimestamp}ms.`);
-      break;
-    case 'sus':
-      await interaction.reply('Preparing a new game of Among Us...');
-      console.log('Starting game prep');
-      
-      // Get all members
-      const allMembers = await interaction.guild.members.fetch();
-      const nonBotMembers = await allMembers.filter(member => !member.user.bot);
-      console.log('Fetched and filtered all members');
-      
-      // Select new Imposter
-      console.log('Selecting new Imposter:');
-      const imposter = await nonBotMembers.random(); 
-      console.log(imposter.user.username);
-      
-      // Assign Imposter role
-      await imposter.roles.remove(sus_crewmate);
-      await imposter.roles.add(sus_imposter);
-      console.log('Imposter role assigned');
-      
-      // Assign crewmate to all other server members
-      console.log('Assigning crewmates to all other members');
-      await nonBotMembers.filter(member => member.user.id != imposter.user.id).forEach((member, i) => {
-        member.roles.remove(sus_imposter);
-        member.roles.add(sus_crewmate);
-        console.log(`Assigned crewmate role to ${member.user.username}`);
-        /*setTimeout(() => {
-          member.roles.remove(sus_imposter);
-          member.roles.add(sus_crewmate);
-          console.log(`Assigned crewmate role to ${member.user.username}`);
-        }, i * 1000);*/
-      });
-      // Announce that the game has begun
-      console.log('Announcing game start');
-      await interaction.channel.send(`${interaction.guild.roles.everyone} A server-wide game of Among Us has started!`);
-      break;
-    case 'say':
-      console.log(interaction.options.get('message'));
-      if (interaction.options.get('message').value.length > 0)
-        await interaction.reply(interaction.options.get('message').value);
-      else
-        await interaction.reply('You did not specify a message to repeat.');
-      break;
-    case 'help':
-      await interaction.reply('**Commands:**\n\n`/ping` - Pings the bot\n\n`/sus` - Starts a server-wide game of Among Us\n\n`/say` - Makes to bot say whatever you want\n\n`/help` - Shows this message');
-      break;
-  }
-});
-
-/*client.on('messageCreate', async (message) => {
-    if (message.author.bot)
+client.on('messageCreate', async (message) => {
+    if (message.author.bot || !message.guild)
         return;
     if (message.content.startsWith(prefix)) {
         const args = message.content.slice(prefix.length).split(' ');
         const command = args.shift();
         switch (command) {
             case 'ping':
-                const msg = await message.reply('Pinging...');
-                await msg.edit(`Pong! The round trip took ${Date.now() - msg.createdTimestamp}ms.`);
+                const pingMsg = await message.reply('Pinging...');
+                await pingMsg.edit(`Pong! The round trip took ${Date.now() - pingMsg.createdTimestamp}ms.`);
                 break;
-            case 'say':
-            case 'repeat':
-                if (args.length > 0)
-                    await message.channel.send(args.join(' '));
-                else
-                    await message.reply('You did not send a message to repeat, cancelling command.');
+            
+            case 'players':
+                const players = await message.guild.roles.cache.get(sus_player).members.map(m => m.user.username);
+                await message.reply(players.length > 0 ? '**Currently playing:**\n' + players.join('\n') : 'No one is playing.');
                 break;
+            
+            case 'join':
+                if (isGame) {
+                  await message.reply('There is already a game running, you cannot join mid-round.');
+                } else if (message.member._roles.includes(sus_player)) {
+                  await message.reply('You are already a player.');
+                } else {
+                  await message.member.roles.add(sus_player);
+                  await message.reply('You have been added to the game.');
+                }
+                break;
+
+            case 'leave':
+              if (isGame && message.member._roles.includes(sus_player)) {
+                await message.reply('You cannot leave the game mid-round!');
+              } else if (message.member._roles.includes(sus_player)) {
+                await message.member.roles.remove(sus_player);
+                await message.reply('You have been removed from the game.');
+              } else {
+                await message.reply('You are not currently in the game.');
+              }
+              break;
+          
+            case 'start':
+                if (!admin.includes(message.author.id)) {
+                  await message.reply('You do not have permission to use this command.');
+                } else if (isGame) {
+                  await message.reply('A game is already running!');
+                } else {
+                  await message.reply('Preparing a new game of Among Us...');
+                  console.log('Starting game prep');
+      
+                  // Get all members
+                  const allPlayers = await message.guild.roles.cache.get(sus_player).members;
+                  const nonBotMembers = await allPlayers.filter(member => !member.user.bot);
+                  console.log('Fetched and filtered all members');
+                  console.log(nonBotMembers);
+      
+                  // Select new Imposter
+                  console.log('Selecting new Imposter:');
+                  const imposter = await nonBotMembers.random(); 
+                  console.log(imposter.user.username);
+      
+                  // Assign Imposter role
+                  await imposter.roles.remove(sus_crewmate);
+                  await imposter.roles.add(sus_imposter);
+                  currentImposter = imposter.user.id;
+                  console.log('Imposter role assigned');
+      
+                  // Assign crewmate to all other server members
+                  console.log('Assigning crewmates to all other members');
+                  await nonBotMembers.filter(member => member.user.id != imposter.user.id).forEach((member, i) => {
+                    member.roles.remove(sus_imposter);
+                    member.roles.add(sus_crewmate);
+                    currentCrewmates.push(member.user.id);
+                    console.log(`Assigned crewmate role to ${member.user.username}`);
+                    /*setTimeout(() => {
+                      member.roles.remove(sus_imposter);
+                      member.roles.add(sus_crewmate);
+                      console.log(`Assigned crewmate role to ${member.user.username}`);
+                    }, i * 1000);*/
+                  });
+                  // Start game
+                  isGame = true;
+                  await client.user.setPresence({status: 'dnd'});
+                  await client.user.setActivity(`for Impostors`, { type: ActivityType.Watching });
+                  // Announce that the game has begun
+                  console.log('Announcing game start');
+                  await message.channel.send(`${'message.guild.roles.everyone'} A server-wide game of Among Us has started!`);
+                }
+                break;
+            
+            case 'stop':
+                if (!admin.includes(message.author.id)) {
+                  await message.reply('You do not have permission to use this command.');
+                } else if (isGame) {
+                  const stopMsg = await message.reply('Stopping the game...');
+                  // Stop game
+                  isGame = false;
+                  await client.user.setPresence({status: 'online'});
+                  await client.user.setActivity(`${prefix}help`, { type: ActivityType.Listening });
+                  await stopMsg.edit('Game stopped.');
+                } else {
+                  await message.reply('There is no game currently running.');
+                }
+                break;
+
+            case 'resetroles':
+                if (!admin.includes(message.author.id)) {
+                  await message.reply('You do not have permission to use this command.');
+                } else {
+                  // Remove game roles from all server members
+                  console.log('Removing game roles from all server members');
+                  const allMembers = await message.guild.members.fetch();
+                  const nonBotMembers = await allMembers.filter(member => !member.user.bot);
+                  await nonBotMembers.forEach((member, i) => {
+                    member.roles.remove(sus_imposter);
+                    member.roles.remove(sus_crewmate);
+                    console.log(`Removed roles from ${member.user.username}`);
+                  });
+                  await message.reply('All game roles have been reset.');
+                }
+                break;
+          
+            case 'status':
+                switch (isGame) {
+                  case true:
+                    await message.reply('The game is currently running.');
+                    break;
+                  case false:
+                    await message.reply('The game is not currently running.');
+                    break;
+                }
+                break;
+          
+            case 'debug':
+                if (!admin.includes(message.author.id)) {
+                  await message.reply('You do not have permission to use this command.');
+                } else {
+                  await message.guild.members.fetch();
+                }
+                break;
+            
             case 'help':
-                await message.reply('**Commands:**\n\nt!ping - Pings the bot\n\nt!say (or t!repeat) - Makes to bot say whatever you want\n\nt!help - Shows this message');
+                await message.reply(`**Commands:**\n\n${prefix}ping - Pings the bot\n\n${prefix}start - Starts a server-wide game of Among Us\n\n${prefix}help - Shows this message`);
                 break;
         }
     }
-});*/
+    if (isGame) {
+      if (message.author.id == currentImposter) {
+        await message.author.send('You are an Imposter!');
+      }
+    }
+});
 
 client.once('ready', () => {
-  console.log('TurtleBot is running!');
-  client.user.setPresence({status: 'online'}); //sets presence
-  client.user.setActivity(`for Imposters`, { type: ActivityType.Watching }); //sets activity
+  console.log('Bot is running!');
+  client.user.setPresence({status: 'online'}); //sets initial presence
+  client.user.setActivity(`${prefix}help`, { type: ActivityType.Listening }); //sets initial status
 });
 
 (async ()=>{
@@ -151,5 +198,5 @@ client.once('ready', () => {
     throw err
   });
 
-  await client.rest.put(Routes.applicationCommands(client.user.id), { body: commands });
+  //await client.rest.put(Routes.applicationCommands(client.user.id), { body: commands });
 })();
