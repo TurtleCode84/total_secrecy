@@ -7,6 +7,9 @@ const admin = ['1017553088464310272']; // user id
 
 var isGame = false; // switch for listening to game activity
 var currentImposter; // temporary storage variable
+var currentCrewmates; // temporary storage variable
+
+const channel = '1203822407354155068';
 
 const sus_player = '1203792083538681958';
 const sus_crewmate = '1203737581984948335';
@@ -79,7 +82,6 @@ client.on('messageCreate', async (message) => {
                   const allPlayers = await message.guild.roles.cache.get(sus_player).members;
                   const nonBotMembers = await allPlayers.filter(member => !member.user.bot);
                   console.log('Fetched and filtered all members');
-                  console.log(nonBotMembers);
       
                   // Select new Imposter
                   console.log('Selecting new Imposter:');
@@ -91,14 +93,19 @@ client.on('messageCreate', async (message) => {
                   await imposter.roles.add(sus_imposter);
                   currentImposter = imposter.user.id;
                   console.log('Imposter role assigned');
+                  //await imposter.send('This bot is currently being alpha tested, please ignore these messages for the moment.\nYou are an Imposter.');
+                  console.log(`Sent role DM to ${imposter.user.username}`);
       
-                  // Assign crewmate to all other server members
-                  console.log('Assigning crewmates to all other members');
+                  // Assign crewmate to all other players
+                  console.log('Assigning crewmates to all other players');
+                  currentCrewmates = [];
                   await nonBotMembers.filter(member => member.user.id != imposter.user.id).forEach((member, i) => {
                     member.roles.remove(sus_imposter);
                     member.roles.add(sus_crewmate);
                     currentCrewmates.push(member.user.id);
                     console.log(`Assigned crewmate role to ${member.user.username}`);
+                    //member.send('This bot is currently being alpha tested, please ignore these messages for the moment.\nYou are a Crewmate.');
+                    console.log(`Sent role DM to ${member.user.username}`);
                     /*setTimeout(() => {
                       member.roles.remove(sus_imposter);
                       member.roles.add(sus_crewmate);
@@ -111,7 +118,7 @@ client.on('messageCreate', async (message) => {
                   await client.user.setActivity(`for Impostors`, { type: ActivityType.Watching });
                   // Announce that the game has begun
                   console.log('Announcing game start');
-                  await message.channel.send(`${'message.guild.roles.everyone'} A server-wide game of Among Us has started!`);
+                  await client.channels.cache.get(channel).send(`<@&${'sus_player'}> A server-wide game of Among Us has started!`);
                 }
                 break;
             
@@ -155,7 +162,7 @@ client.on('messageCreate', async (message) => {
                     await message.reply(`The game is currently running with ${statusPlayers} players.`);
                     break;
                   case false:
-                    await message.reply(`The game is not currently running. ${statusPlayers} players are ready for a new round`);
+                    await message.reply(`The game is not currently running. ${statusPlayers} players are ready for a new round.`);
                     break;
                 }
                 break;
@@ -175,7 +182,9 @@ client.on('messageCreate', async (message) => {
     }
     if (isGame) {
       if (message.author.id == currentImposter) {
-        await message.author.send('You are an Imposter!');
+        console.log('Imposter message received: ' + message.content);
+      } else if (currentCrewmates.includes(message.author.id)) {
+        console.log('Crewmate message received: ' + message.content);
       }
     }
 });
