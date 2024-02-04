@@ -69,6 +69,8 @@ client.on('messageCreate', async (message) => {
                   await message.reply('You do not have permission to use this command.');
                 } else if (isGame) {
                   await message.reply('A game is already running!');
+                } else if (message.guild.roles.cache.get(sus_player).members.map(m => m.user.username).length < 4) {
+                  await message.reply('There are not enough players to start the game.');
                 } else {
                   await message.reply('Preparing a new game of Among Us...');
                   console.log('Starting game prep');
@@ -139,6 +141,7 @@ client.on('messageCreate', async (message) => {
                   await nonBotMembers.forEach((member, i) => {
                     member.roles.remove(sus_imposter);
                     member.roles.remove(sus_crewmate);
+                    member.roles.remove(sus_player);
                     console.log(`Removed roles from ${member.user.username}`);
                   });
                   await message.reply('All game roles have been reset.');
@@ -146,12 +149,13 @@ client.on('messageCreate', async (message) => {
                 break;
           
             case 'status':
+                const statusPlayers = message.guild.roles.cache.get(sus_player).members.map(m => m.user.id).length;
                 switch (isGame) {
                   case true:
-                    await message.reply('The game is currently running.');
+                    await message.reply(`The game is currently running with ${statusPlayers} players.`);
                     break;
                   case false:
-                    await message.reply('The game is not currently running.');
+                    await message.reply(`The game is not currently running. ${statusPlayers} players are ready for a new round`);
                     break;
                 }
                 break;
