@@ -107,11 +107,6 @@ client.on('messageCreate', async (message) => {
                     console.log(`Assigned crewmate role to ${member.user.username}`);
                     //member.send('This bot is currently being alpha tested, please ignore these messages for the moment.\nYou are a Crewmate.');
                     console.log(`Sent role DM to ${member.user.username}`);
-                    /*setTimeout(() => {
-                      member.roles.remove(sus_imposter);
-                      member.roles.add(sus_crewmate);
-                      console.log(`Assigned crewmate role to ${member.user.username}`);
-                    }, i * 1000);*/
                   });
                   // Start game
                   isGame = true;
