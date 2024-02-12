@@ -8,6 +8,7 @@ const admin = ['1017553088464310272']; // user id
 var isGame = false; // switch for listening to game activity
 var currentImposter; // temporary storage variable
 var currentCrewmates; // temporary storage variable
+var currentDead; // temporary storage variable
 
 const channel = '1203822407354155068';
 
@@ -75,7 +76,7 @@ client.on('messageCreate', async (message) => {
                 } else if (message.guild.roles.cache.get(sus_player).members.map(m => m.user.username).length < 4) {
                   await message.reply('There are not enough players to start the game.');
                 } else {
-                  await message.reply('Preparing a new game of Among Us...');
+                  await message.reply('Starting a new game of Among Us!');
                   console.log('Starting game prep');
       
                   // Get all members
