@@ -1,6 +1,6 @@
 const fs = require('node:fs');
 const path = require('node:path');
-const { exec, execSync } = require('child_process');
+const { execSync } = require('child_process');
 const fetch = require('node-fetch');
 const { Client, Collection, Routes, GatewayIntentBits } = require('discord.js');
 const token = process.env['TOKEN'];
@@ -58,6 +58,5 @@ for (const file of eventFiles) {
   await client.login(token).catch((err) => {
     throw err
   });
-
-  execSync('node deploy-commands.js');
+  
 })();
