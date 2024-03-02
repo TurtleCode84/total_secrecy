@@ -1,5 +1,5 @@
 const { Events, ActivityType } = require('discord.js');
-const { execSync } = require('child_process');
+const { exec } = require('child_process');
 const express = require("express");
 const app = express();
 
@@ -12,7 +12,7 @@ module.exports = {
     client.user.setActivity('/help', { type: ActivityType.Listening }); //sets initial status
 
     console.log('Initial status set');
-    execSync('node deploy-commands.js');
+    exec('node deploy-commands.js');
 
     console.log('Deploying web app');
     app.get("/", (req, res) => res.json({message: 'hello, world!'}));
