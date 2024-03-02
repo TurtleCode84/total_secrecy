@@ -43,7 +43,7 @@ for (const file of eventFiles) {
 
 app.get("/", (req, res) => res.json({message: 'hello, world!'}));
 
-const server = app.listen(port, () => {
+const server = app.listen(port, async () => {
   console.log(`Web app listening on port ${port}!`);
   // Log in to Discord with your client's token
   await client.login(token);
