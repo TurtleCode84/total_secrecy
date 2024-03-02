@@ -47,8 +47,9 @@ for (const file of eventFiles) {
   const ratelimitTest = await fetch(`https://discord.com/api/v9/invites/discord-developers`);
 
   if(!ratelimitTest.ok) {
-    console.log('Rate limited')
-    execSync('kill 1');
+    console.log('Rate limited');
+    console.log(await ratelimitTest.json());
+    execSync('exit 1');
     return;
   };
 
