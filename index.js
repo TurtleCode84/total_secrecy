@@ -44,7 +44,7 @@ app.get("/", (req, res) => res.json({message: 'hello, world!'}));
 
 try {
   const server = app.listen(10000, async () => {
-    console.log(`Web app listening on port ${port}!`);
+    console.log(`Web app listening on port 10000!`);
     // Log in to Discord with your client's token
     await client.login(token);
     console.log('Logged into Discord!');
