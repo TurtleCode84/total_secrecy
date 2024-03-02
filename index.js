@@ -4,7 +4,7 @@ const { Client, Collection, Routes, GatewayIntentBits } = require('discord.js');
 const token = process.env['TOKEN'];
 const express = require("express");
 const app = express();
-const port = process.env.PORT || 3001;
+const port = process.env['PORT'] || 8080;
 
 // Create a new client instance
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
@@ -41,11 +41,11 @@ for (const file of eventFiles) {
   }
 }
 
-app.get("/", (req, res) => res.json({message: 'hello, world!'}));
+// Log in to Discord with your client's token
+client.login(token);
 
-const server = app.listen(port, async () => {
+/*app.get("/", (req, res) => res.json({message: 'hello, world!'}));
+
+const server = app.listen(port, () => {
   console.log(`Web app listening on port ${port}!`);
-  // Log in to Discord with your client's token
-  await client.login(token);
-  console.log(`Logged into Discord!`);
-});
+});*/
