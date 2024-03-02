@@ -6,7 +6,7 @@ module.exports = {
   async execute(message) {
     if (message.author.bot || !message.guild) return;
 
-    const isGame = fs.readFileSync("../game.json", (error, data) => {
+    const isGame = fs.readFileSync("./game.json", (error, data) => {
       
       if (error) {
         console.error(error);
