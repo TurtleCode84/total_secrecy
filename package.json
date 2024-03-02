@@ -1,8 +1,8 @@
 {
-  "name": "discord-active-developer",
+  "name": "total-secrecy",
   "private": true,
-  "version": "0.0.0",
-  "description": "Discord just launched the new \"Active Developer\" badge and they're encouraging new developers to join the community and get it. If you're still learning and want the badge, follow the instructions below!",
+  "version": "1.0.0",
+  "description": "A bot",
   "main": "index.js",
   "repository": {
     "type": "git",
