@@ -47,9 +47,10 @@ for (const file of eventFiles) {
   const ratelimitTest = await fetch(`https://discord.com/api/v9/invites/discord-developers`);
 
   if(!ratelimitTest.ok) {
-    console.log('Rate limited');
+    console.log('Something went wrong with the Discord API:');
+    console.log(await ratelimitTest.status);
     console.log(await ratelimitTest.json());
-    console.log(await ratelimitTest.headers);
+    console.log(await ratelimitTest.headers.get('retry-after'));
     execSync('kill 1');
     return;
   };
