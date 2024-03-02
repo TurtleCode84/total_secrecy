@@ -1,3 +1,4 @@
+const { createInterface } = require('node:readline');
 const fs = require('node:fs');
 const path = require('node:path');
 const { execSync } = require('child_process');
@@ -6,7 +7,18 @@ const { Client, Collection, Routes, GatewayIntentBits } = require('discord.js');
 const token = process.env['TOKEN'];
 
 // Create a new client instance
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent,
+    GatewayIntentBits.GuildMembers,
+    GatewayIntentBits.GuildPresences,
+    GatewayIntentBits.DirectMessages,
+    GatewayIntentBits.GuildMessageReactions,
+  ]
+});
+const rl = createInterface({ input: process.stdin, output: process.stdout });
 
 client.commands = new Collection();
 const foldersPath = path.join(__dirname, 'commands');
