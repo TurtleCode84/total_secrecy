@@ -49,7 +49,8 @@ for (const file of eventFiles) {
   if(!ratelimitTest.ok) {
     console.log('Rate limited');
     console.log(await ratelimitTest.json());
-    execSync('exit 1');
+    console.log(await ratelimitTest.headers);
+    execSync('kill 1');
     return;
   };
 
