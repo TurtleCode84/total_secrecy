@@ -51,7 +51,7 @@ for (const file of eventFiles) {
     console.log(await ratelimitTest.status);
     console.log(await ratelimitTest.json());
     console.log(await ratelimitTest.headers.get('retry-after'));
-    exit(1);
+    process.exit(1);
     return;
   };
 
