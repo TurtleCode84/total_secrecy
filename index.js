@@ -5,8 +5,6 @@ const fetch = require('node-fetch');
 const { Client, Collection, Routes, GatewayIntentBits } = require('discord.js');
 const token = process.env['TOKEN'];
 
-var isGame = true; // intial game state
-
 // Create a new client instance
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
