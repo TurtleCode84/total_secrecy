@@ -5,13 +5,13 @@ const { execSync } = require('child_process');
 const fetch = require('node-fetch');
 const { Client, Collection, Routes, GatewayIntentBits } = require('discord.js');
 const token = process.env['TOKEN'];
-global.gameInfo = {
-  isGame: true,
-  admins: ['1017553088464310272'],
-  announcementChannel: '',
-  playerRole: '',
+global.botInfo = {
+  isGame: false,
+  announcementChannel: '1213315946001866825',
+  adminRole: '1213606972297977917',
+  playerRole: '1213607619504111726',
   players: [],
-  dead: []
+  failed: []
 }
 
 // Create a new client instance

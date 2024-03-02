@@ -1,10 +1,9 @@
 const { Events } = require('discord.js');
 const fs = require('node:fs');
-const tasks = require('../tasks.js');
 
 module.exports = {
-  name: Events.MessageCreate,
-  async execute(message) {
+  name: Events.MessageUpdate,
+  async execute(oldMessage, message) {
     if (message.author.bot || !message.guild) return;
 
     if (botInfo.isGame) {
@@ -14,9 +13,6 @@ module.exports = {
         console.log('Crewmate message received: ' + message.content);
       }*/
       console.log(message.author.username + ": " + message.content);
-    }
-    if (message.content == '!dev') {
-      message.reply(JSON.stringify(botInfo));
     }
   },
 };
