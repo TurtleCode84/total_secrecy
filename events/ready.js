@@ -1,6 +1,6 @@
 const { Events, ActivityType } = require('discord.js');
-const express = require("express");
-const app = express();
+//const express = require("express");
+//const app = express();
 
 module.exports = {
   name: Events.ClientReady,
@@ -10,9 +10,9 @@ module.exports = {
     client.user.setPresence({status: 'online'}); //sets initial presence
     client.user.setActivity('/help', { type: ActivityType.Listening }); //sets initial status
     
-    app.get("/", (req, res) => res.json({message: 'hello, world!'}));
-    const server = app.listen(10000, () => {
-      console.log(`Web app listening on port 10000!`);
-    });
+    //app.get("/", (req, res) => res.json({message: 'hello, world!'}));
+    //const server = app.listen(10000, () => {
+    //  console.log(`Web app listening on port 10000!`);
+    //});
   },
 };

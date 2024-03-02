@@ -9,7 +9,7 @@
     "url": "git+https://github.com/hackermondev/discord-active-developer.git"
   },
   "scripts": {
-    "start": "node deploy-commands.js && node index.js"
+    "start": "node ."
   },
   "keywords": [],
   "author": "",

@@ -1,5 +1,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
+const { exec, execSync } = require('child_process');
+const fetch = require('node-fetch');
 const { Client, Collection, Routes, GatewayIntentBits } = require('discord.js');
 const token = process.env['TOKEN'];
 
@@ -38,8 +40,21 @@ for (const file of eventFiles) {
   }
 }
 
-try {
-  client.login(token);
-} catch (error) {
-  console.log(error);
-}
+(async ()=>{
+  const token = process.env['TOKEN'];
+  if(!token) throw new Error('Invalid token');
+
+  const ratelimitTest = await fetch(`https://discord.com/api/v9/invites/discord-developers`);
+
+  if(!ratelimitTest.ok) {
+    console.log('Rate limited')
+    execSync('kill 1');
+    return;
+  };
+
+  await client.login(token).catch((err) => {
+    throw err
+  });
+
+  execSync('node deploy-commands.js');
+})();
