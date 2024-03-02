@@ -12,9 +12,9 @@ var currentDead; // temporary storage variable
 
 const channel = '1203822407354155068';
 
-const sus_player = '1203792083538681958';
-const sus_crewmate = '1203737581984948335';
-const sus_imposter = '1203741209714106408';
+const playerRole = '1203792083538681958';
+const crewmateRole = '1203737581984948335';
+const imposterRole = '1203741209714106408';
 
 const client = new Client({
   intents: [
@@ -42,26 +42,26 @@ client.on('messageCreate', async (message) => {
                 break;
             
             case 'players':
-                const players = await message.guild.roles.cache.get(sus_player).members.map(m => m.user.username);
+                const players = await message.guild.roles.cache.get(playerRole).members.map(m => m.user.username);
                 await message.reply(players.length > 0 ? '**Currently playing:**\n' + players.join('\n') : 'No one is playing.');
                 break;
             
             case 'join':
                 if (isGame) {
                   await message.reply('There is already a game running, you cannot join mid-round.');
-                } else if (message.member._roles.includes(sus_player)) {
+                } else if (message.member._roles.includes(playerRole)) {
                   await message.reply('You are already a player.');
                 } else {
-                  await message.member.roles.add(sus_player);
+                  await message.member.roles.add(playerRole);
                   await message.reply('You have been added to the game.');
                 }
                 break;
 
             case 'leave':
-              if (isGame && message.member._roles.includes(sus_player)) {
+              if (isGame && message.member._roles.includes(playerRole)) {
                 await message.reply('You cannot leave the game mid-round!');
-              } else if (message.member._roles.includes(sus_player)) {
-                await message.member.roles.remove(sus_player);
+              } else if (message.member._roles.includes(playerRole)) {
+                await message.member.roles.remove(playerRole);
                 await message.reply('You have been removed from the game.');
               } else {
                 await message.reply('You are not currently in the game.');
@@ -73,14 +73,14 @@ client.on('messageCreate', async (message) => {
                   await message.reply('You do not have permission to use this command.');
                 } else if (isGame) {
                   await message.reply('A game is already running!');
-                } else if (message.guild.roles.cache.get(sus_player).members.map(m => m.user.username).length < 4) {
-                  await message.reply('There are not enough players to start the game.');
+                } else if (message.guild.roles.cache.get(playerRole).members.map(m => m.user.username).length < 4) {
+                  await message.reply('There are not enough players to start a round.');
                 } else {
-                  await message.reply('Starting a new game of Among Us!');
+                  await message.reply('Starting a new game of Total Secrecy...');
                   console.log('Starting game prep');
       
                   // Get all members
-                  const allPlayers = await message.guild.roles.cache.get(sus_player).members;
+                  const allPlayers = await message.guild.roles.cache.get(playerRole).members;
                   const nonBotMembers = await allPlayers.filter(member => !member.user.bot);
                   console.log('Fetched and filtered all members');
       
@@ -90,8 +90,8 @@ client.on('messageCreate', async (message) => {
                   console.log(imposter.user.username);
       
                   // Assign Imposter role
-                  await imposter.roles.remove(sus_crewmate);
-                  await imposter.roles.add(sus_imposter);
+                  await imposter.roles.remove(crewmateRole);
+                  await imposter.roles.add(imposterRole);
                   currentImposter = imposter.user.id;
                   console.log('Imposter role assigned');
                   //await imposter.send('This bot is currently being alpha tested, please ignore these messages for the moment.\nYou are an Imposter.');
@@ -101,8 +101,8 @@ client.on('messageCreate', async (message) => {
                   console.log('Assigning crewmates to all other players');
                   currentCrewmates = [];
                   await nonBotMembers.filter(member => member.user.id != imposter.user.id).forEach((member, i) => {
-                    member.roles.remove(sus_imposter);
-                    member.roles.add(sus_crewmate);
+                    member.roles.remove(imposterRole);
+                    member.roles.add(crewmateRole);
                     currentCrewmates.push(member.user.id);
                     console.log(`Assigned crewmate role to ${member.user.username}`);
                     //member.send('This bot is currently being alpha tested, please ignore these messages for the moment.\nYou are a Crewmate.');
@@ -114,7 +114,7 @@ client.on('messageCreate', async (message) => {
                   await client.user.setActivity(`for Impostors`, { type: ActivityType.Watching });
                   // Announce that the game has begun
                   console.log('Announcing game start');
-                  await client.channels.cache.get(channel).send(`<@&${'sus_player'}> A server-wide game of Among Us has started!`);
+                  await client.channels.cache.get(channel).send(`<@&${'playerRole'}> A server-wide game of Among Us has started!`);
                 }
                 break;
             
@@ -142,9 +142,9 @@ client.on('messageCreate', async (message) => {
                   const allMembers = await message.guild.members.fetch();
                   const nonBotMembers = await allMembers.filter(member => !member.user.bot);
                   await nonBotMembers.forEach((member, i) => {
-                    member.roles.remove(sus_imposter);
-                    member.roles.remove(sus_crewmate);
-                    member.roles.remove(sus_player);
+                    member.roles.remove(imposterRole);
+                    member.roles.remove(crewmateRole);
+                    member.roles.remove(playerRole);
                     console.log(`Removed roles from ${member.user.username}`);
                   });
                   await message.reply('All game roles have been reset.');
@@ -152,7 +152,7 @@ client.on('messageCreate', async (message) => {
                 break;
           
             case 'status':
-                const statusPlayers = message.guild.roles.cache.get(sus_player).members.map(m => m.user.id).length;
+                const statusPlayers = message.guild.roles.cache.get(playerRole).members.map(m => m.user.id).length;
                 switch (isGame) {
                   case true:
                     await message.reply(`The game is currently running with ${statusPlayers} players.`);
