@@ -7,9 +7,9 @@ const { Client, Collection, Routes, GatewayIntentBits } = require('discord.js');
 const token = process.env['TOKEN'];
 global.botInfo = {
   isGame: false,
-  announcementChannel: '1213315946001866825',
-  adminRole: '1213606972297977917',
-  playerRole: '1213607619504111726',
+  announcementChannel: process.env['ANNOUNCEMENT_CHANNEL'],
+  adminRole: process.env['ADMIN_ROLE'],
+  playerRole: process.env['PLAYER_ROLE'],
   players: [],
   failed: []
 }

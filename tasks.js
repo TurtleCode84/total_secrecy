@@ -8,7 +8,7 @@ module.exports = [
   {
     id: 2,
     name: 'A second example task.',
-    keywords [],
+    keywords: [],
     onCompletion: 0,
   },
 ]
