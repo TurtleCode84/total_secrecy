@@ -43,10 +43,10 @@ module.exports = {
     console.log(`Success, PlayerDB has ${playerInfo.length} entries`);
 
     await interaction.editReply({content: 'A new round of Total Secrecy has started!', ephemeral: true});
-    await interaction.member.guild.channels.cache.get(botInfo.announcementChannel).send(`<@&${botInfo.playerRole}> A server-wide game of Total Secrecy has started! Check your DMs for your tasks, or do \`/tasks\` to view them.`);
+    await interaction.guild.channels.cache.get(botInfo.announcementChannel).send(`<@&${botInfo.playerRole}> A server-wide game of Total Secrecy has started! Check your DMs for your tasks, or do \`/tasks\` to view them.`);
 
     nonBotMembers.forEach((member) => {
-      member.send(`A new round of Total Secrecy has started in \`${interaction.member.guild.name}\`!\nHere is your task:\n${tasks[playerInfo.find(p => p.id === member.user.id).task].name}`);
+      member.send(`A new round of Total Secrecy has started in \`${interaction.guild.name}\`!\nHere is your task:\n${tasks[playerInfo.find(p => p.id === member.user.id).task].name}`);
     });
     await interaction.followUp({content: 'All players have been given their tasks!', ephemeral: true});
   },
