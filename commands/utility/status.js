@@ -8,10 +8,12 @@ module.exports = {
   async execute(interaction) {
     switch (botInfo.isGame) {
       case true:
-        await interaction.reply(`The game is currently running with ${playerInfo.length} players.`);
+        const tplayers = await playerInfo.map(p => `- ${p.username}`);
+        await interaction.reply(`The game is currently running with **${tplayers.length}** players${tplayers.length > 0 ? ':\n' + tplayers.join('\n') : '.'}`);
         break;
       case false:
-        await interaction.reply(`The game is not currently running. ${interaction.guild.roles.cache.get(botInfo.playerRole).members.map(m => m.user.id).length} players are ready for a new round.`);
+        const fplayers = await interaction.guild.roles.cache.get(botInfo.playerRole).members.map(m => `- ${m.user.username}`);
+        await interaction.reply(`The game is not currently running. **${fplayers.length}** players are ready for a new round${fplayers.length > 0 ? ':\n' + fplayers.join('\n') : '.'}`);
         break;
     }
   },
