@@ -1,5 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js');
 const tasks = require('../../tasks.js');
+const fs = require('node:fs');
+const path = require('node:path');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -39,9 +41,26 @@ module.exports = {
       };
       playerInfo.push(memberInfo);
       console.log(`Pushed ${memberInfo.username} to PlayerDB`);
+      const handlersPath = path.join(__dirname, 'handlers');
+      const handlerFile = fs.readdirSync(handlersPath).find(file => file == `${tasks[memberInfo.task].handler.identifier}.js`);
+        
+      const filePath = path.join(handlersPath, handlerFile);
+      const events = require(filePath);
+      events.forEach((event) => {
+        if (event.once) {
+          interaction.client.once(event.name, (...args) => event.execute(...args));
+        } else {
+          interaction.client.on(event.name, (...args) => event.execute(...args));
+        }
+        console.log(`Loaded ${event.name} event`);
+      });
+      console.log(`All events for ${memberInfo.username} loaded`);
     });
     console.log(`Success, PlayerDB has ${playerInfo.length} entries`);
 
+    await interaction.client.user.setPresence({status: 'dnd'});
+    await interaction.client.user.setActivity(`for secrets`, { type: ActivityType.Watching });
+    
     await interaction.editReply({content: 'A new round of Total Secrecy has started!', ephemeral: true});
     await interaction.guild.channels.cache.get(botInfo.announcementChannel).send(`<@&${botInfo.playerRole}> A server-wide game of Total Secrecy has started! Check your DMs for your tasks, or do \`/task\` to view them.`);
 

@@ -1,14 +1,20 @@
 module.exports = [
   {
-    id: 1,
     name: 'You cannot type the letter **a**.',
-    keywords: [],
-    onCompletion: 0,
+    keywords: [], // may deprecate this in favor of using the handler identifier to match to a dictionary of keywords for each type
+    nextTask: -1,
+    handler: {
+      identifier: 'noLetter',
+      parameter: 'a',
+    },
   },
   {
-    id: 2,
     name: 'You cannot type the letter **s**.',
     keywords: [],
-    onCompletion: 0,
+    nextTask: -1,
+    handler: {
+      identifier: 'noLetter',
+      parameter: 's',
+    },
   },
 ]
