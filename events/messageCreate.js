@@ -1,6 +1,5 @@
 const { Events } = require('discord.js');
 const fs = require('node:fs');
-const tasks = require('../tasks.js');
 
 module.exports = {
   name: Events.MessageCreate,

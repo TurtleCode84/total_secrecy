@@ -9,9 +9,7 @@ global.botInfo = {
   isGame: false,
   announcementChannel: process.env['ANNOUNCEMENT_CHANNEL'],
   adminRole: process.env['ADMIN_ROLE'],
-  playerRole: process.env['PLAYER_ROLE'],
-  players: [],
-  failed: []
+  playerRole: process.env['PLAYER_ROLE']
 }
 global.playerInfo = [];
 

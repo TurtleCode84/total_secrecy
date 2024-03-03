@@ -1,5 +1,5 @@
 # Total Secrecy
-### The Discord Adaptation of a popular social maniplation game.
+### The Discord adaptation of a popular social manipulation game.
 
 #### !! This bot is a work in progress, expect no documentation or functionality !!
 
