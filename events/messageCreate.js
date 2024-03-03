@@ -15,7 +15,7 @@ module.exports = {
       }*/
       console.log(message.author.username + ": " + message.content);
     }
-    if (message.content == '!dev') {
+    if (message.content == 'ts!dev') {
       message.reply(JSON.stringify(botInfo));
     }
   },

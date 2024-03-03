@@ -29,6 +29,15 @@ for (const folder of commandFolders) {
 // Construct and prepare an instance of the REST module
 const rest = new REST().setToken(token);
 
+/*rest.delete(Routes.applicationGuildCommand(clientId, guildId, 'id'))
+  .then(() => console.log('Successfully deleted guild command'))
+  .catch(console.error);
+
+// for global commands
+rest.delete(Routes.applicationCommand(clientId, 'id'))
+  .then(() => console.log('Successfully deleted application command'))
+  .catch(console.error);*/
+
 // for guild-based commands
 rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: [] })
 	.then(() => console.log('Successfully deleted all guild commands.'))

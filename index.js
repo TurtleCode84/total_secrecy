@@ -13,6 +13,7 @@ global.botInfo = {
   players: [],
   failed: []
 }
+global.playerInfo = [];
 
 // Create a new client instance
 const client = new Client({
