@@ -8,7 +8,8 @@ module.exports = {
       option.setName('command')
         .setDescription('The command to reload.')
         .setRequired(true))
-    .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
+    .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
+    .setDMPermission(false),
   async execute(interaction) {
     const commandName = interaction.options.getString('command', true).toLowerCase();
     const command = interaction.client.commands.get(commandName);

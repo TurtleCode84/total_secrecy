@@ -4,7 +4,8 @@ const tasks = require('../../tasks.js');
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('start')
-    .setDescription('Starts a new round of Total Secrecy'),
+    .setDescription('Starts a new round of Total Secrecy')
+    .setDMPermission(false),
   async execute(interaction) {
     if (!interaction.member.roles.cache.find(r => r.id === botInfo.adminRole)) {
       await interaction.reply({content: 'You do not have permission to use this command!', ephemeral: true});

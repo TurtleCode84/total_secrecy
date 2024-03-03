@@ -3,7 +3,8 @@ const { SlashCommandBuilder } = require('discord.js');
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('leave')
-    .setDescription('Leaves the game'),
+    .setDescription('Leaves the game')
+    .setDMPermission(false),
   async execute(interaction) {
     if (botInfo.isGame && interaction.member._roles.includes(botInfo.playerRole)) {
       await interaction.reply({ content: 'You cannot leave the game mid-round!', ephemeral: true});

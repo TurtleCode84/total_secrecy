@@ -3,7 +3,8 @@ const { SlashCommandBuilder } = require('discord.js');
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('join')
-    .setDescription('Joins the game'),
+    .setDescription('Joins the game')
+    .setDMPermission(false),
   async execute(interaction) {
     if (botInfo.isGame && !interaction.member._roles.includes(botInfo.playerRole)) {
       await interaction.reply({ content: 'There is already a game running, you cannot join mid-round.', ephemeral: true });
