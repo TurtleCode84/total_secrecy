@@ -1,3 +1,8 @@
+# Total Secrecy
+### The Discord Adaptation of a popular social maniplation game.
+
+#### !! This bot is a work in progress, expect no documentation or functionality !!
+
 ## environment variables
 
 - `TOKEN`, your Discord bot token
