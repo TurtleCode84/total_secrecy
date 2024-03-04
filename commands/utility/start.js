@@ -1,7 +1,8 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, ActivityType } = require('discord.js');
 const tasks = require('../../tasks.js');
 const fs = require('node:fs');
 const path = require('node:path');
+const handlersPath = path.join(__dirname, '../../handlers');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -15,7 +16,7 @@ module.exports = {
     } else if (botInfo.isGame) {
       await interaction.reply({content: 'A round is already in progress! Use \`/stop\` to end the current round early.', ephemeral: true});
       return;
-    } else if (interaction.guild.roles.cache.get(botInfo.playerRole).members.map(m => m.user.id).length < 2) {
+    } else if (interaction.guild.roles.cache.get(botInfo.playerRole).members.map(m => m.user.id).length < 1) { // 2
       await interaction.reply({content: 'There are not enough players to start a round.', ephemeral: true});
       return;
     }
@@ -41,18 +42,16 @@ module.exports = {
       };
       playerInfo.push(memberInfo);
       console.log(`Pushed ${memberInfo.username} to PlayerDB`);
-      const handlersPath = path.join(__dirname, 'handlers');
       const handlerFile = fs.readdirSync(handlersPath).find(file => file == `${tasks[memberInfo.task].handler.identifier}.js`);
-        
       const filePath = path.join(handlersPath, handlerFile);
-      const events = require(filePath);
-      events.forEach((event) => {
-        if (event.once) {
-          interaction.client.once(event.name, (...args) => event.execute(...args));
+      
+      const listeners = require(filePath);
+      listeners.forEach(async (listener) => {
+        if (listener.once) {
+          interaction.client.once(listener.name, (...args) => listener.execute(...args));
         } else {
-          interaction.client.on(event.name, (...args) => event.execute(...args));
+          interaction.client.on(listener.name, (...args) => listener.execute(...args));
         }
-        console.log(`Loaded ${event.name} event`);
       });
       console.log(`All events for ${memberInfo.username} loaded`);
     });
