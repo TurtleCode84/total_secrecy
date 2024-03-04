@@ -12,7 +12,7 @@ module.exports = {
     }
 
     const commands = await interaction.client.application.commands.fetch();
-    const kool = await interaction.client.application.commands.set(commands);
+    const kool = await interaction.client.application.commands.set(commands.map(c => c.toJSON()));
     if (kool.size > 0) {
       await interaction.reply({content: 'Commands synced successfully!', ephemeral: true});
     } else {
