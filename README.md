@@ -1,13 +1,28 @@
 # Total Secrecy
 ### The Discord adaptation of a popular social manipulation game.
 
-#### !! This bot is a work in progress, expect no documentation or functionality !!
+#### !! This bot is a WIP and under active development, expect bugs !!
 
-## environment variables
+## Commands
 
-- `TOKEN`, your Discord bot token
-- `GUILD_ID`, your server ID
-- `CLIENT_ID`, the bot's application ID
-- `ADMIN_ROLE`, your server's admin role ID
-- `PLAYER_ROLE`, your server's player role ID
-- `ANNOUNCEMENT_CHANNEL`, the ID of the game announcement channnel in your server
+All commands are prefixed with `/`
+
+### Game Commands
+
+- `/start`: Starts a new game of Total Secrecy.
+- `/end`: Ends the current game.
+- `/join`: Joins the current game.
+- `/leave`: Leaves the current game.
+- `/status`: Lists who is currently playing.
+- `/round`: Provides admin information about the current round/game.
+- `/task`: Returns currently assigned task.
+- `/listtasks`: Lists all possible tasks.
+
+## Environment Variables
+
+- `TOKEN`: Your Discord bot token.
+- `GUILD_ID`: Your server ID.
+- `CLIENT_ID`: The bot's application ID.
+- `ADMIN_ROLE`: Your server's admin role ID.
+- `PLAYER_ROLE`: Your server's player role ID.
+- `ANNOUNCEMENT_CHANNEL`: The ID of the game announcement channel in your server.
