@@ -46,12 +46,13 @@ module.exports = {
       const filePath = path.join(handlersPath, handlerFile);
       
       const listeners = require(filePath);
-      listeners.forEach(async (listener) => {
+      listeners.forEach((listener) => {
         if (listener.once) {
           interaction.client.once(listener.name, (...args) => listener.execute(...args));
         } else {
           interaction.client.on(listener.name, (...args) => listener.execute(...args));
         }
+        console.log(`Loaded ${listener.name} listener`);
       });
       console.log(`All events for ${memberInfo.username} loaded`);
     });
