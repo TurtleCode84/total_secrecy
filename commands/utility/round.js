@@ -12,7 +12,7 @@ module.exports = {
       await interaction.reply({ content: 'There is no round currently running.', ephemeral: true });
       return;
     }
-    const info = playerInfo.map(player => `- ${player.username} ${player.failed ? ':x:' : ':white_check_mark:'}: ${tasks[player.task].name}`).join('\n');
-    await interaction.reply({ content: `**Players:**\n${info}`, ephemeral: true });
+    const players = playerInfo.map(player => `- ${player.username} ${player.failed ? ':x:' : ':white_check_mark:'}: ${tasks[player.task].name}`).join('\n');
+    await interaction.reply({ content: `**Players:**\n${players}\n**Listeners:** ${handlerInfo.length}`, ephemeral: true });
   },
 };

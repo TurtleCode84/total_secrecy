@@ -55,6 +55,7 @@ module.exports = {
         }
         handlerInfo.push({
           'name': listener.name,
+          'user': memberInfo.id,
           'callback': callback,
         });
         console.log(`Loaded ${listener.name} listener`);

@@ -1,4 +1,5 @@
 const { Events } = require('discord.js');
+const tasks = require('../../tasks.js');
 
 module.exports = [
   {
@@ -6,8 +7,8 @@ module.exports = [
     async execute(memberInfo, message) {
       if (message.author.bot || !message.guild || message.author.id != memberInfo.id) return;
   
-      if (botInfo.isGame) {
-        console.log(memberInfo.username + " [c]: " + message.content);
+      if (message.content.includes(tasks[playerInfo.find(p => p.id == memberInfo.id).task].handler.parameter)) {
+        message.guild.channels.cache.get(botInfo.announcementChannel).send(`<@${memberInfo.id}> failed their task!`);
       }
     },
   },
@@ -16,8 +17,8 @@ module.exports = [
     async execute(memberInfo, oldMessage, message) {
       if (message.author.bot || !message.guild || message.author.id != memberInfo.id) return;
 
-      if (botInfo.isGame) {
-        console.log(memberInfo.username + " [u]: " + message.content);
+      if (message.content.includes(tasks[playerInfo.find(p => p.id == memberInfo.id).task].handler.parameter)) {
+        message.guild.channels.cache.get(botInfo.announcementChannel).send(`<@${memberInfo.id}> failed their task!`);
       }
     },
   },
