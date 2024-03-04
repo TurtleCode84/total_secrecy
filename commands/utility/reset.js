@@ -21,8 +21,13 @@ module.exports = {
       console.log(`Removed role from ${member.user.username}`);
     });
 
-    console.log('Purging PlayerDB and resetting game state');
+    console.log('Purging PlayerDB/HandlerDB and resetting game state');
     playerInfo = [];
+    handlerInfo.forEach((h) => {
+      interaction.client.removeListener(h.name, h.callback);
+      console.log(`Removed ${h.name}`);
+    });
+    handlerInfo = [];
     botInfo.isGame = false;
     await interaction.editReply('The bot has been reset, any current rounds have been ended and all players have been removed from the game.');
   },

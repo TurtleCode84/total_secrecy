@@ -14,6 +14,13 @@ module.exports = {
       return;
     }
 
+    console.log('Purging PlayerDB/HandlerDB and resetting game state');
+    playerInfo = [];
+    handlerInfo.forEach((h) => {
+      interaction.client.removeListener(h.name, h.callback);
+      console.log(`Removed ${h.name}`);
+    });
+    handlerInfo = [];
     botInfo.isGame = false;
     await interaction.reply('The current round of Total Secrecy has ended.');
 

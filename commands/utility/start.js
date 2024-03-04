@@ -47,11 +47,16 @@ module.exports = {
       
       const listeners = require(filePath);
       listeners.forEach((listener) => {
+        const callback = (...args) => listener.execute(memberInfo, ...args);
         if (listener.once) {
-          interaction.client.once(listener.name, (...args) => listener.execute(...args));
+          interaction.client.once(listener.name, callback);
         } else {
-          interaction.client.on(listener.name, (...args) => listener.execute(...args));
+          interaction.client.on(listener.name, callback);
         }
+        handlerInfo.push({
+          'name': listener.name,
+          'callback': callback,
+        });
         console.log(`Loaded ${listener.name} listener`);
       });
       console.log(`All events for ${memberInfo.username} loaded`);
@@ -62,11 +67,11 @@ module.exports = {
     await interaction.client.user.setActivity(`for secrets`, { type: ActivityType.Watching });
     
     await interaction.editReply({content: 'A new round of Total Secrecy has started!', ephemeral: true});
-    await interaction.guild.channels.cache.get(botInfo.announcementChannel).send(`<@&${botInfo.playerRole}> A server-wide game of Total Secrecy has started! Check your DMs for your tasks, or do \`/task\` to view them.`);
+    await interaction.guild.channels.cache.get(botInfo.announcementChannel).send(`<@&${botInfo.playerRole}> A server-wide game of Total Secrecy has started! Do \`/task\` to see what your task for this round is.`);
 
-    nonBotMembers.forEach((member) => {
+    /*nonBotMembers.forEach((member) => {
       member.send(`A new round of Total Secrecy has started in \`${interaction.guild.name}\`!\nHere is your task:\n${tasks[playerInfo.find(p => p.id === member.user.id).task].name}`);
     });
-    await interaction.followUp({content: 'All players have been given their tasks!', ephemeral: true});
+    await interaction.followUp({content: 'All players have been given their tasks!', ephemeral: true});*/
   },
 };
