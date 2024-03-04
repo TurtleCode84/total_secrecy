@@ -1,5 +1,5 @@
 const { Events } = require('discord.js');
-const tasks = require('../../tasks.js');
+const tasks = require('../tasks.js');
 
 module.exports = [
   {
