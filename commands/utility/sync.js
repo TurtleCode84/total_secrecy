@@ -14,9 +14,9 @@ module.exports = {
     const commands = await interaction.client.application.commands.fetch();
     const kool = await interaction.client.application.commands.set(commands);
     if (kool.size > 0) {
-      await interaction.reply('Commands synced successfully!');
+      await interaction.reply({content: 'Commands synced successfully!', ephemeral: true});
     } else {
-      await interaction.reply('Commands failed to sync!');
+      await interaction.reply({content: 'Commands failed to sync!', ephemeral: true});
     }
   },
 };
