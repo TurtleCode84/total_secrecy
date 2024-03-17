@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
+const botInfo = require('../../lib/botInfo');
 
 module.exports = {
   data: new SlashCommandBuilder()
