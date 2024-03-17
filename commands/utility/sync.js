@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
+const { botInfo } = require('../../lib/helpers');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -6,7 +7,8 @@ module.exports = {
     .setDescription('Sync all commands with Discord')
     .setDMPermission(false),
   async execute(interaction) {
-    if (!interaction.member.roles.cache.find(r => r.id === botInfo.adminRole)) {
+    const bot = await botInfo();
+    if (!interaction.member.roles.cache.find(r => r.id === bot.adminRole)) {
       await interaction.reply({content: 'You do not have permission to use this command!', ephemeral: true});
       return;
     }

@@ -1,4 +1,5 @@
 const { Events } = require('discord.js');
+const { botInfo } = require('../lib/helpers');
 const tasks = require('../tasks.js');
 
 module.exports = [
@@ -8,7 +9,8 @@ module.exports = [
       if (message.author.bot || !message.guild || message.author.id != memberInfo.id || playerInfo.find(p => p.id == memberInfo.id).failed) return;
   
       if (message.content.includes(tasks[playerInfo.find(p => p.id == memberInfo.id).task].handler.parameter)) {
-        message.guild.channels.cache.get(botInfo.announcementChannel).send(`<@${memberInfo.id}> failed their task!`);
+        const bot = await botInfo();
+        message.guild.channels.cache.get(bot.announcementChannel).send(`<@${memberInfo.id}> failed their task!`);
         playerInfo[playerInfo.findIndex(p => p.id == memberInfo.id)].failed = true;
       }
     },
@@ -19,7 +21,8 @@ module.exports = [
       if (message.author.bot || !message.guild || message.author.id != memberInfo.id || playerInfo.find(p => p.id == memberInfo.id).failed) return;
 
       if (message.content.includes(tasks[playerInfo.find(p => p.id == memberInfo.id).task].handler.parameter)) {
-        message.guild.channels.cache.get(botInfo.announcementChannel).send(`<@${memberInfo.id}> failed their task!`);
+        const bot = await botInfo();
+        message.guild.channels.cache.get(bot.announcementChannel).send(`<@${memberInfo.id}> failed their task!`);
         playerInfo[playerInfo.findIndex(p => p.id == memberInfo.id)].failed = true;
       }
     },
