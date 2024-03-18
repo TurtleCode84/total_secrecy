@@ -1,8 +1,8 @@
 module.exports = [
   {
     name: 'You cannot type the letter **a**.',
-    keywords: [], // may deprecate this in favor of using the handler identifier to match to a dictionary of keywords for each type
     nextTask: -1,
+    points: 20,
     handler: {
       identifier: 'noLetter',
       parameter: 'a',
@@ -10,8 +10,8 @@ module.exports = [
   },
   {
     name: 'You cannot type the letter **s**.',
-    keywords: [],
     nextTask: -1,
+    points: 20,
     handler: {
       identifier: 'noLetter',
       parameter: 's',
