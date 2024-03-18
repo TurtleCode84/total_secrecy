@@ -55,7 +55,7 @@ module.exports = {
         } else {
           interaction.client.on(listener.name, callback);
         }
-        insertDB('handlers', {
+        handlerInfo.push({
           'name': listener.name,
           'user': memberInfo.id,
           'callback': callback,
@@ -64,7 +64,7 @@ module.exports = {
       });
       console.log(`All events for ${memberInfo.username} loaded`);
     });
-    console.log(`Success, PlayerDB has ${playerInfo.length} entries`);
+    console.log(`Success, ${nonBotMembers.length} entries inserted in PlayerDB`);
 
     await interaction.client.user.setPresence({status: 'dnd'});
     await interaction.client.user.setActivity(`for secrets`, { type: ActivityType.Watching });

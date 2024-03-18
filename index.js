@@ -1,9 +1,8 @@
 const { createInterface } = require('node:readline');
 const fs = require('node:fs');
 const path = require('node:path');
-const { execSync } = require('child_process');
 const fetch = require('node-fetch');
-const { Client, Collection, Routes, GatewayIntentBits } = require('discord.js');
+const { Client, Collection, GatewayIntentBits } = require('discord.js');
 global.handlerInfo = [];
 
 // Create a new client instance

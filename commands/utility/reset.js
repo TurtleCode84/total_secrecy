@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { botInfo, setGameState } = require('../../lib/helpers');
+const { botInfo, setGameState, purgeDB } = require('../../lib/helpers');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -24,12 +24,12 @@ module.exports = {
     });
 
     console.log('Purging PlayerDB/HandlerDB and resetting game state');
-    playerInfo = []; // mongofy
-    handlerInfo.forEach((h) => { // mongofy
+    await purgeDB('players');
+    handlerInfo.forEach((h) => {
       interaction.client.removeListener(h.name, h.callback);
       console.log(`Removed ${h.name}`);
     });
-    handlerInfo = []; // mongofy
+    handlerInfo = [];
     await setGameState(false);
     await interaction.editReply('The bot has been reset, any current rounds have been ended and all players have been removed from the game.');
   },
