@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, ActivityType } = require('discord.js');
 const { botInfo, setGameState, purgeDB } = require('../../lib/helpers');
 
 module.exports = {
@@ -31,6 +31,9 @@ module.exports = {
     });
     handlerInfo = [];
     await setGameState(false);
+    await interaction.client.user.setPresence({status: 'online'});
+    await interaction.client.user.setActivity(`/help`, { type: ActivityType.Listening });
+
     await interaction.editReply('The bot has been reset, any current rounds have been ended and all players have been removed from the game.');
   },
 };
