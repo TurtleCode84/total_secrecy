@@ -3,7 +3,11 @@ const fs = require('node:fs');
 const path = require('node:path');
 const fetch = require('node-fetch');
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
+const { checkHeart, setHeart } = require('./lib/helpers');
 global.handlerInfo = [];
+global.heartInfo = {
+  time: 5000,
+};
 
 // Create a new client instance
 const client = new Client({
@@ -69,5 +73,7 @@ for (const file of eventFiles) {
   await client.login(token).catch((err) => {
     throw err
   });
-  
+
+  heartInfo.id = await setHeart();
+  heartInfo.interval = setInterval(checkHeart, heartInfo.time);
 })();
