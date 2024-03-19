@@ -64,7 +64,7 @@ module.exports = {
       });
       console.log(`All events for ${memberInfo.username} loaded`);
     });
-    console.log(`Success, ${nonBotMembers.length} entries inserted in PlayerDB`);
+    console.log('Success, all entries inserted in PlayerDB');
 
     await interaction.client.user.setPresence({status: 'dnd'});
     await interaction.client.user.setActivity(`for secrets`, { type: ActivityType.Watching });
