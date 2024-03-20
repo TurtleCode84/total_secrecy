@@ -75,5 +75,5 @@ for (const file of eventFiles) {
   });
 
   heartInfo.id = await setHeart();
-  heartInfo.interval = setInterval(checkHeart, heartInfo.time);
+  heartInfo.interval = setInterval(checkHeart, heartInfo.time, client);
 })();
