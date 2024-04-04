@@ -17,4 +17,13 @@ module.exports = [
       parameter: 's',
     },
   },
+  {
+    name: 'Every message you send must be a **reply** to another.',
+    nextTask: -1,
+    points: 20,
+    handler: {
+      identifier: 'mustReply',
+      parameter: undefined,
+    },
+  },
 ]
