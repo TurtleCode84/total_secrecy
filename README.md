@@ -1,7 +1,7 @@
 # Total Secrecy
 ### The Discord adaptation of a popular social manipulation game.
 
-#### !! This bot is a WIP and under active development, expect bugs !!
+#### !! This bot is unfinished, expect bugs !!
 
 ## Commands
 
@@ -26,7 +26,57 @@ All commands are prefixed with `/`
 - `MONGODB_URI`: A full MongoDB URI pointing to an active database.
 
 ## Database Setup
-*Coming soon...*
+
+### Schema
+
+> Format is `database.collection`
+
+`data.bots`
+
+```js
+{
+    _id: <objectId>,
+    isGame: <boolean>,
+    announcementChannel: <channelId>,
+    adminRole: <roleId>,
+    playerRole: <roleId>,
+    server: <serverId>,
+    heart: <uuid>
+}
+```
+
+`data.scores`
+
+```js
+
+{
+    _id: <objectId>,
+    server: <serverId>,
+    scores: [
+        {
+            user: <userId>,
+            score: <integer>
+        }
+    ]
+}
+
+```
+
+`data.players`
+
+```js
+
+{
+    id: <userId>,
+    username: <username>,
+    task: <taskNumber>,
+    failed: <boolean>,
+    score: <integer>
+}
+
+```
+
+### Additional information
 
 <blockquote>
 
