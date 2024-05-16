@@ -89,3 +89,13 @@ The following Environment Variables have been moved to a database document:
 Additional documentation will follow in the coming development cycle.
 
 </blockquote>
+
+## To Do
+
+<small>(imported from TrackTask)</small>
+
+- [ ] Add more tasks
+- [ ] Implement scoring
+- [ ] Modularize
+- [ ] Reroll for harder task?
+- [ ] Implement time limit
