@@ -92,10 +92,10 @@ Additional documentation will follow in the coming development cycle.
 
 ## To Do
 
-<small>(imported from TrackTask)</small>
-
 - [ ] Add more tasks
 - [ ] Implement scoring
 - [ ] Modularize
 - [ ] Reroll for harder task?
 - [ ] Implement time limit
+
+<sup><sub>(imported from [TrackTask](https://tracktask.eu.org))</sub></sup>
